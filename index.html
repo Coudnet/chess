@@ -43,6 +43,10 @@
     const size = 8;
     let res = [];
 
+    /**
+     * Функция для создания одномерного массива всех ячеек шахматной доски
+     * @returns {Array}
+     */
     function makeChessBoard() {
         let chessboard = [];
         letters.forEach((letter) => {
@@ -53,6 +57,13 @@
         return chessboard;
     }
 
+    /**
+     * Для каждой новой фигуры ферзя, которая обозначается номером counter
+     * перебирает все оставшиеся места на доске и вызывает для них саму себя.
+     * @param board
+     * @param counter
+     * @returns {*}
+     */
     function placeChessPiece(board, counter) {
         if(!board.length) { return null; }
         counter++;
@@ -77,8 +88,15 @@
                 return true;
             }
         }
+        return null;
     }
 
+    /**
+     * Вычисляет ячейки, которые бьет ферзь по диагонали
+     * @param cell
+     * @param size
+     * @returns {*[]}
+     */
     function calculateDiagonal(cell, size) {
         let diagonal = [cell];
         const letterPosition = letters.indexOf(cell[0]);
@@ -123,6 +141,11 @@
         return diagonal;
     }
 
+    /**
+     * Ставит первую фигуру
+     * @param firstCell
+     * @returns {boolean}
+     */
     function placeFirstChess(firstCell) {
         const diagonal = calculateDiagonal(firstCell, size);
         const board = makeChessBoard(size);
@@ -139,8 +162,11 @@
         }
     }
 
+    /**
+     * Рендер полученных положений ферзей
+     * @param firstChess
+     */
     function render(firstChess) {
-        //placeChessPiece(makeChessBoard(8), 0);
         clear();
         placeFirstChess(firstChess);
         if(res.length === size) {
@@ -158,6 +184,9 @@
         }
     }
 
+    /**
+     * Очистка доски
+     */
     function clear() {
         res = [];
         document.querySelector("main").removeChild(document.querySelector(".board"));
