@@ -22,7 +22,7 @@
             justify-content: center;
             align-items: center;
         }
-        .ferz {
+        .queen {
             background-color: aquamarine;
         }
 
@@ -74,14 +74,7 @@
 
         for(let i = 0; i < board.length; i++) {
             let suggestCell = board[i];
-            const diagonal = calculateDiagonal(suggestCell, size);
-
-            const newboard = board.map((cell) => {
-                if ((cell[0] === suggestCell[0]) || (cell[1] === suggestCell[1]) || (diagonal.indexOf(cell) !== -1)) {
-                    return null;
-                }
-                return cell;
-            }).filter(Boolean);
+            const newboard = deleteCells(suggestCell, board);
 
             if(placeChessPiece(newboard, counter)) {
                 res.push(suggestCell);
@@ -141,20 +134,25 @@
         return diagonal;
     }
 
+    function deleteCells(cell, board) {
+        const diagonal = calculateDiagonal(cell, size);
+
+        return board.map((celli) => {
+            if ((celli[0] === cell[0]) || (celli[1] === cell[1]) || (diagonal.indexOf(celli) !== -1)) {
+                return null;
+            }
+            return celli;
+        }).filter(Boolean);
+    }
+
     /**
      * Ставит первую фигуру
      * @param firstCell
      * @returns {boolean}
      */
     function placeFirstChess(firstCell) {
-        const diagonal = calculateDiagonal(firstCell, size);
-        const board = makeChessBoard(size);
-        const newboard = board.map((cell) => {
-            if ((cell[0] === firstCell[0]) || (cell[1] === firstCell[1]) || (diagonal.indexOf(cell) !== -1)) {
-                return null;
-            }
-            return cell;
-        }).filter(Boolean);
+        const board = makeChessBoard();
+        const newboard = deleteCells(firstCell, board);
 
         if(placeChessPiece(newboard, 1)) {
             res.push(firstCell);
@@ -176,7 +174,7 @@
                 let cellElem = document.createElement("div");
                 cellElem.classList.add("cell");
                 cellElem.innerHTML = cell;
-                if(res.indexOf(cell) !== -1) cellElem.classList.add("ferz");
+                if(res.indexOf(cell) !== -1) cellElem.classList.add("queen");
                 boardElem.appendChild(cellElem);
             })
         } else {
